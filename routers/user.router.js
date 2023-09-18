@@ -54,4 +54,22 @@ userRouter.post("/add-user", [
     }
 })
 
+userRouter.post("/add-users", async (req, res) => {
+    try {
+        const dataUsers = [
+            {phone: "89137993083", name: "Иван", email: "ivan@mail.ru"},
+            {phone: "89137993084", name: "Игорь", email: "igor@mail.ru"},
+            {phone: "89137993085", name: "Артём", email: "artyom@mail.ru"},
+            {phone: "89137993086", name: "Сергей", email: "sergey@mail.ru"},
+        ]
+        const controllerInstance = new controller();
+        for (const elem of dataUsers) {
+            await controllerInstance.addUser(elem);
+        }
+        return res.status(201).json({message: "Данные пользователей успешно добавлены."})
+    } catch (error) {
+        return res.status(400).json({message: error.message});
+    }
+})
+
 module.exports = userRouter;

@@ -1,4 +1,4 @@
-
+const express = require('express')
 const appointmentRouter = express.Router();
 const controllerAppointment = require('../controllers/appointment.controller')
 const controllerUser = require('../controllers/user.controller')
