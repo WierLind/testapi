@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    String @id @default(uuid())
+  phone String @unique
+  name  String
+  email String @unique
+
+  Appointments Appointment[]
+}
+
+model Doctor {
+  id   String @id @default(uuid())
+  name String
+  spec String
+
+  Appointments Appointment[]
+  Schedule     Schedule[]
+}
+
+model Schedule {
+  id String @id @default(uuid())
+
+  doctor_id String
+  doctor    Doctor @relation(fields: [doctor_id], references: [id])
+
+  slots Slot[]
+
+  date String
+}
+
+model Slot {
+  id String @id @default(uuid())
+
+  date_time DateTime @db.Time
+
+  appointment Appointment?
+
+  schedule    Schedule @relation(fields: [schedule_id], references: [id])
+  schedule_id String
+}
+
+model Appointment {
+  id String @id @default(uuid())
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id])
+
+  doctor_id String
+  doctor    Doctor @relation(fields: [doctor_id], references: [id])
+
+  slot_id String @unique
+  slot    Slot   @relation(fields: [slot_id], references: [id])
+}
